@@ -1,0 +1,31 @@
+.book-item {
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 12px;
+    border: 1px solid darkblue;
+    margin: 12px;
+    list-style: none;
+}
+
+.book {
+    color: darkblue;
+}
+
+.author {
+    display: block;
+    padding-bottom: 10px;
+}
+
+.delete {
+    background-color: red;
+    border-radius: 12px;
+    padding: 5px;
+
+    margin-bottom: 12px;
+}
+
+.highlight {
+    background-color: blue;
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 12px;
+}
