@@ -23,39 +23,37 @@ export const UserList = () => {
         });
     };
 
+    const createActionClickHandler = (actionType) => {
+        setUserAction({ user: null, action: ActionTypes.add });
+    };
+
     const closeHandler = () => {
         setUserAction({ user: null, action: null });
     };
 
-    const userEditHandler = (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const { firstName, lastName, imageUrl, phoneNumber, email, ...address } =
-            Object.fromEntries(formData);
-        const userData = { firstName, lastName, imageUrl, email, phoneNumber, address };
-
-        edit(userAction.user._id, userData).then((user) => {
-            closeHandler();
-        });
+    const userEditHandler = (userData) => {
+        edit(userAction.user._id, userData)
+            .then(() => {
+                getAll().then((users) => setUsers(users));
+                closeHandler();
+            })
+            .catch((err) => alert(err.message));
     };
 
-    const userCreateHandler = (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target.parentNode.parentNode);
-
-        const { firstName, lastName, imageUrl, phoneNumber, email, ...address } =
-            Object.fromEntries(formData);
-
-        const userData = { firstName, lastName, imageUrl, email, phoneNumber, address };
-
-        create(userData).then((user) => {
-            setUsers((oldUser) => [...oldUser, user]);
-            closeHandler();
-        });
+    const userCreateHandler = (userData) => {
+        create(userData)
+            .then((user) => {
+                setUsers((oldUser) => [...oldUser, user]);
+                closeHandler();
+            })
+            .catch((err) => alert(err.message));
     };
 
     const userDeleteHandler = () => {
-        deleted(userAction.user._id).then(closeHandler());
+        deleted(userAction.user._id).then(() => {
+            getAll().then((users) => setUsers(users));
+            closeHandler();
+        });
     };
 
     return (
@@ -260,10 +258,7 @@ export const UserList = () => {
                 </table>
             </div>
 
-            <button
-                className="btn-add btn"
-                onClick={() => userActionClickHandler(null, ActionTypes.add)}
-            >
+            <button className="btn-add btn" onClick={() => createActionClickHandler()}>
                 Add new user
             </button>
         </>

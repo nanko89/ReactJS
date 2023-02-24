@@ -1,15 +1,23 @@
 export const getAll = async () => {
     const url = "http://localhost:3005/api/users";
     const responce = await fetch(url);
-    const result = await responce.json();
-    return result.users;
+    if (responce.ok) {
+        const result = await responce.json();
+        return result.users;
+    } else {
+        throw new Error("Unable to get all users");
+    }
 };
 
 export const getById = async (id) => {
     const url = `http://localhost:3005/api/users/${id}`;
     const responce = await fetch(url);
-    const result = await responce.json();
-    return result.user;
+    if (responce.ok) {
+        const result = await responce.json();
+        return result.user;
+    } else {
+        throw new Error("Unable to get user");
+    }
 };
 
 export const create = async (data) => {
@@ -22,8 +30,12 @@ export const create = async (data) => {
         body: JSON.stringify(data),
     });
 
-    const result = await responce.json();
-    return result.user;
+    if (responce.ok) {
+        const result = await responce.json();
+        return result.user;
+    } else {
+        throw new Error("Unable to create user");
+    }
 };
 
 export const edit = async (id, data) => {
@@ -36,8 +48,12 @@ export const edit = async (id, data) => {
         body: JSON.stringify(data),
     });
 
-    const result = await responce.json();
-    return result.user;
+    if (responce.ok) {
+        const result = await responce.json();
+        return result.user;
+    } else {
+        throw new Error("Unable to edit user");
+    }
 };
 
 export const deleted = async (id) => {
@@ -49,6 +65,10 @@ export const deleted = async (id) => {
         },
     });
 
-    const result = await responce.json();
-    return result.user;
+    if (responce.ok) {
+        const result = await responce.json();
+        return result.user;
+    } else {
+        throw new Error("Unable to delete user");
+    }
 };

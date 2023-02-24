@@ -1,4 +1,48 @@
+import { useState } from "react";
+
 export const UserEdit = ({ user, onClose, onUserEdit }) => {
+    const [errors, setErrors] = useState({});
+
+    const [values, setValues] = useState({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        imageUrl: user.imageUrl,
+        country: user.address.country,
+        city: user.address.city,
+        street: user.address.street,
+        streetNumber: user.address.streetNumber,
+    });
+
+    const changeHandler = (e) => {
+        setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
+    };
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const { country, city, street, streetNumber, ...userData } = values;
+        userData.address = { country, city, street, streetNumber };
+
+        onUserEdit(userData);
+    };
+
+    const minLength = (e, bound) => {
+        setErrors((state) => ({ ...state, [e.target.name]: values[e.target.name].length < bound }));
+    };
+
+    const validEmail = (e) => {
+        const email = values[e.target.name];
+        const re = /\S+@\S+\.\S+/;
+        setErrors((state) => ({ ...state, [e.target.name]: !re.test(email) }));
+    };
+
+    const isPositiveNumber = (e) => {
+        const number = Number(e.target.value);
+        setErrors((state) => ({ ...state, [e.target.name]: !(number > 0 || number === NaN) }));
+    };
+
+    const isValidForm = Object.values(errors).some((x) => x);
     return (
         <div className="overlay">
             <div className="backdrop" onClick={onClose}></div>
@@ -24,7 +68,7 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                             </svg>
                         </button>
                     </header>
-                    <form onSubmit={onUserEdit}>
+                    <form onSubmit={submitHandler}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -36,12 +80,17 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                         id="firstName"
                                         name="firstName"
                                         type="text"
-                                        defaultValue={user.firstName}
+                                        // defaultValue={user.firstName}
+                                        value={values.firstName}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => minLength(e, 3)}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    First name should be at least 3 characters long!
-                                </p>
+                                {errors.firstName && (
+                                    <p className="form-error">
+                                        First name should be at least 3 characters long!
+                                    </p>
+                                )}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="lastName">Last name</label>
@@ -52,13 +101,16 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                     <input
                                         id="lastName"
                                         name="lastName"
-                                        type="text"
-                                        defaultValue={user.lastName}
+                                        value={values.lastName}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => minLength(e, 3)}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Last name should be at least 3 characters long!
-                                </p>
+                                {errors.lastName && (
+                                    <p className="form-error">
+                                        Last name should be at least 3 characters long!
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -73,10 +125,13 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                         id="email"
                                         name="email"
                                         type="text"
-                                        defaultValue={user.email}
+                                        // defaultValue={user.email}
+                                        value={values.email}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => validEmail(e)}
                                     />
                                 </div>
-                                <p className="form-error">Email is not valid!</p>
+                                {errors.email && <p className="form-error">Email is not valid!</p>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="phoneNumber">Phone number</label>
@@ -88,10 +143,15 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                         id="phoneNumber"
                                         name="phoneNumber"
                                         type="text"
-                                        defaultValue={user.phoneNumber}
+                                        // defaultValue={user.phoneNumber}
+                                        value={values.phoneNumber}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => minLength(e, 8)}
                                     />
                                 </div>
-                                <p className="form-error">Phone number is not valid!</p>
+                                {errors.phoneNumber && (
+                                    <p className="form-error">Phone number is not valid!</p>
+                                )}
                             </div>
                         </div>
 
@@ -105,10 +165,15 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                     id="imageUrl"
                                     name="imageUrl"
                                     type="text"
-                                    defaultValue={user.imageUrl}
+                                    // defaultValue={user.imageUrl}
+                                    value={values.imageUrl}
+                                    onChange={changeHandler}
+                                    onBlur={(e) => minLength(e, 3)}
                                 />
                             </div>
-                            <p className="form-error">ImageUrl is not valid!</p>
+                            {errors.imageUrl && (
+                                <p className="form-error">ImageUrl is not valid!</p>
+                            )}
                         </div>
 
                         <div className="form-row">
@@ -122,12 +187,17 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                         id="country"
                                         name="country"
                                         type="text"
-                                        defaultValue={user.address.country}
+                                        // defaultValue={user.address.country}
+                                        value={values.country}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => minLength(e, 2)}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Country should be at least 2 characters long!
-                                </p>
+                                {errors.country && (
+                                    <p className="form-error">
+                                        Country should be at least 2 characters long!
+                                    </p>
+                                )}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="city">City</label>
@@ -139,12 +209,17 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                         id="city"
                                         name="city"
                                         type="text"
-                                        defaultValue={user.address.city}
+                                        // defaultValue={user.address.city}
+                                        value={values.city}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => minLength(e, 3)}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    City should be at least 3 characters long!
-                                </p>
+                                {errors.city && (
+                                    <p className="form-error">
+                                        City should be at least 3 characters long!
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -159,12 +234,17 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                         id="street"
                                         name="street"
                                         type="text"
-                                        defaultValue={user.address.street}
+                                        // defaultValue={user.address.street}
+                                        value={values.street}
+                                        onChange={changeHandler}
+                                        onBlur={(e) => minLength(e, 3)}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Street should be at least 3 characters long!
-                                </p>
+                                {errors.street && (
+                                    <p className="form-error">
+                                        Street should be at least 3 characters long!
+                                    </p>
+                                )}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="streetNumber">Street number</label>
@@ -175,17 +255,27 @@ export const UserEdit = ({ user, onClose, onUserEdit }) => {
                                     <input
                                         id="streetNumber"
                                         name="streetNumber"
-                                        defaultValue={user.address.streetNumber}
+                                        // defaultValue={user.address.streetNumber}
                                         type="text"
+                                        value={values.streetNumber}
+                                        onChange={changeHandler}
+                                        onBlur={isPositiveNumber}
                                     />
                                 </div>
-                                <p className="form-error">
-                                    Street number should be a positive number!
-                                </p>
+                                {errors.streetNumber && (
+                                    <p className="form-error">
+                                        Street number should be a positive number!
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button id="action-save" className="btn" type="submit">
+                            <button
+                                id="action-save"
+                                className="btn"
+                                type="submit"
+                                disabled={isValidForm}
+                            >
                                 Save
                             </button>
                             <button
