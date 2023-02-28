@@ -2,3 +2,7 @@
 @import url("./components/Home/Home.module.css");
 @import url("./components/Catalog/Catalog.module.css");
 @import url("./components/Details/Details.module.css");
+@import url("./components/Create/Create.module.css");
+@import url("./components/Edit/Edit.module.css");
+@import url("./components/Login/Login.module.css");
+@import url("./components/Register/Register.module.css");
