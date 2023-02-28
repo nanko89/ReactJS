@@ -1,4 +1,4 @@
-export const Game = ({ imageUrl, title }) => {
+export const LatesGame = ({ imageUrl, title }) => {
     return (
         <div className="game">
             <div className="image-wrap">

@@ -1,14 +1,6 @@
-import { useEffect, useState } from "react";
-import * as gameService from "../../services/gameService.js";
-import { Game } from "./Game/Game.js";
+import { LatesGame } from "./Game/LatesGame.js";
 
-export const Home = () => {
-    const [games, setGames] = useState([]);
-
-    useEffect(() => {
-        gameService.getAll().then((result) => setGames(result));
-    }, []);
-
+export const Home = ({ games }) => {
     return (
         <section id="welcome-world">
             <div className="welcome-message">
@@ -19,7 +11,7 @@ export const Home = () => {
             <div id="home-page">
                 <h1>Latest Games</h1>
                 {games.length > 0 ? (
-                    games.map((g) => <Game key={g._id} {...g} />)
+                    games.map((g) => <LatesGame key={g._id} {...g} />)
                 ) : (
                     <p className="no-articles">No games yet</p>
                 )}
