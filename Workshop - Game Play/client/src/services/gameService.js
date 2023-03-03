@@ -5,3 +5,7 @@ export const getAll = () => {
         res.json()
     );
 };
+
+export const getById = (id) => {
+    return fetch(`${baseUrl}/data/games/${id}`).then((res) => res.json());
+};

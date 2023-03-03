@@ -1,4 +1,6 @@
-export const LatesGame = ({ imageUrl, title }) => {
+import { Link } from "react-router-dom";
+
+export const LatesGame = ({ _id, imageUrl, title }) => {
     return (
         <div className="game">
             <div className="image-wrap">
@@ -13,9 +15,9 @@ export const LatesGame = ({ imageUrl, title }) => {
                 <span>☆</span>
             </div>
             <div className="data-buttons">
-                <a href="#" className="btn details-btn">
+                <Link to={`/catalog/${_id}`} className="btn details-btn">
                     Details
-                </a>
+                </Link>
             </div>
         </div>
     );

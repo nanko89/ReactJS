@@ -15,8 +15,24 @@ import { Create } from "./components/Create/Create.js";
 function App() {
     const [games, setGames] = useState([]);
 
+    const addGameHandler = (gameData) => {
+        setGames((state) => [...state, gameData]);
+    };
+
+    const addComment = (gameId, comment) => {
+        setGames((state) => {
+            const game = state.find((g) => g._id == gameId);
+            const comments = game.comments || [];
+            comments.push(comment);
+
+            return [...state.filter((g) => g._id !== gameId), { ...game, comments: comments }];
+        });
+    };
+
     useEffect(() => {
-        gameService.getAll().then((result) => setGames(result));
+        gameService.getAll().then((result) => {
+            setGames(result);
+        });
     }, []);
 
     return (
@@ -29,8 +45,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/catalog" element={<Catalog games={games} />} />
-                <Route path="/catalog/:gameId" element={<Details />} />
-                <Route path="/create" element={<Create />} />
+                <Route path="/catalog/:gameId" element={<Details addComment={addComment} />} />
+                <Route path="/create" element={<Create addGameHandler={addGameHandler} />} />
                 <Route path="/catalog/edit/:id" element={<Edit />} />
             </Routes>
         </div>
