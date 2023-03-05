@@ -1,4 +1,17 @@
 .site-wrapper {
-    width: 200px;
-    margin: 50px auto;
+    width: 500px;
+    margin: 100px auto;
+    text-align: center;
+}
+
+header {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.add {
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(201, 228, 45);
 }

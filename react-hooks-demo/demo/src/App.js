@@ -38,12 +38,11 @@ function App() {
         <TaskContext.Provider value={{ tasks, taskDeleteHandler, toggleTask, onTaskEditHandler }}>
             <div className={styles["site-wrapper"]}>
                 <header>
-                    <h1>TODO App</h1>
+                    <h1>TODO List</h1>
                 </header>
                 <main>
-                    {isLoading ? <p>Loading....</p> : <TaskList />}
-
                     <CreateTask createTaskHandler={createTaskHandler} />
+                    {isLoading ? <p>Loading....</p> : <TaskList />}
                 </main>
             </div>
         </TaskContext.Provider>

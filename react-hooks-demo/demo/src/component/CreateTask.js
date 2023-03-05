@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import styles from "./CreateTask.module.css";
+
 export const CreateTask = ({ createTaskHandler }) => {
     const [task, setTask] = useState("");
 
@@ -22,10 +24,10 @@ export const CreateTask = ({ createTaskHandler }) => {
                 name="taskName"
                 value={task}
                 onChange={onTaskChange}
-                placeholder="Do the dishes"
+                placeholder="Add New Task Here..."
             />
 
-            <input type="submit" value="ADD" />
+            <input className={styles.add} type="submit" value="ADD" />
         </form>
     );
 };

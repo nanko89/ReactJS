@@ -1,0 +1,8 @@
+.add {
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: rgb(224, 167, 11);
+    border-radius: 12px;
+    padding: 12px 24px;
+    margin: 12px;
+}

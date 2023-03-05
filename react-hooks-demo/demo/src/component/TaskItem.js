@@ -15,7 +15,6 @@ export const TaskItem = ({ task }) => {
     const onEdit = (e) => {
         e.preventDefault();
         const { title } = Object.fromEntries(new FormData(e.target));
-        console.log(title);
         onTaskEditHandler(task, title);
         setIsEdit(false);
     };
@@ -35,15 +34,21 @@ export const TaskItem = ({ task }) => {
             >
                 {task.title}
             </span>
-            <button onClick={() => taskDeleteHandler(task._id)}>X</button>
-            <button onClick={taskEditHandler}>Edit</button>
+            <div className="buttons">
+                <button className={styles.delete} onClick={() => taskDeleteHandler(task._id)}>
+                    <i className="fa-solid fa-trash-can"></i>
+                </button>
+                <button className={styles.edit} onClick={taskEditHandler}>
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            </div>
         </>
     );
 
     const editTitle = (
         <form onSubmit={onEdit}>
             <input type="text" name="title" defaultValue={task.title} />
-            <input type="submit" value="SAVE" />
+            <button className={styles.save}>SAVE</button>
         </form>
     );
     return <li>{isEdit ? editTitle : taskTitle}</li>;

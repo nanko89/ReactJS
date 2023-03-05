@@ -1,8 +1,51 @@
+.completed {
+    text-decoration: line-through;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid grey;
+    padding: 6px;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+form {
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+form input {
+    font-size: 18px;
+    border: none;
+}
+li:first-child {
+    border-radius: 12px 12px 0 0;
+}
+
+li:last-child {
+    border-radius: 0 0 12px 12px;
+}
+
 span,
 button {
     cursor: pointer;
+    padding: 6px 18px;
 }
 
-.completed {
-    text-decoration: line-through;
+.delete {
+    background: rgba(146, 8, 8, 0.72);
+    color: whitesmoke;
+}
+
+.edit {
+    background: rgba(3, 119, 3, 0.673);
+    color: whitesmoke;
+}
+
+.save {
+    background: rgba(7, 7, 141, 0.712);
+    position: relative;
+    left: 50%;
 }
