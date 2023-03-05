@@ -1,15 +1,14 @@
 import { TaskItem } from "./TaskItem.js";
 
-export const TaskList = ({ tasks, taskDeleteHandler }) => {
+import { useContext } from "react";
+import { TaskContext } from "../contexts/TaskContext.js";
+
+export const TaskList = () => {
+    const { tasks } = useContext(TaskContext);
     return (
         <ul>
-            {tasks.map((t) => (
-                <TaskItem
-                    key={t._id}
-                    id={t._id}
-                    task={t.title}
-                    taskDeleteHandler={taskDeleteHandler}
-                />
+            {tasks.map((task) => (
+                <TaskItem key={task._id} task={task} />
             ))}
         </ul>
     );

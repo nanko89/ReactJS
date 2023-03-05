@@ -1,36 +1,52 @@
-import { TaskList } from "./component/TaskList.js";
+import { TaskContext } from "./contexts/TaskContext.js";
+
+import { useFetch } from "./hooks/useFetch.js";
+import { useTodos } from "./hooks/useTodos.js";
+
 import styles from "./App.module.css";
+import { TaskList } from "./component/TaskList.js";
 import { CreateTask } from "./component/CreateTask.js";
-import { useState } from "react";
 
 function App() {
-    const [tasks, setTasks] = useState([
-        { _id: 1, title: "first" },
-        { _id: 2, title: "second" },
-        { _id: 3, title: "third" },
-    ]);
+    const [tasks, setTasks, isLoading] = useFetch("http://localhost:3030/jsonstore/todos", []);
+    const { removeTodo, addTodo, updateTodo } = useTodos();
 
-    const createTaskHandler = (newTask) => {
-        setTasks((state) => [
-            ...state,
-            { _id: state[state.length - 1]?._id + 1 || 1, title: newTask },
-        ]);
+    const createTaskHandler = async (newTask) => {
+        const createTodo = await addTodo(newTask);
+        setTasks((state) => [...state, createTodo]);
     };
 
     const taskDeleteHandler = (taskId) => {
-        setTasks((state) => state.filter((x) => x._id !== taskId));
+        removeTodo(taskId).then(() => {
+            setTasks((state) => state.filter((x) => x._id !== taskId));
+        });
+    };
+
+    const toggleTask = async (task) => {
+        const updatedTask = { ...task, isCompleted: !task.isCompleted };
+        await updateTodo(task._id, updatedTask);
+        setTasks((state) => state.map((x) => (x._id == task._id ? updatedTask : x)));
+    };
+
+    const onTaskEditHandler = async (task, newTitle) => {
+        const updatedTask = { ...task, title: newTitle };
+        await updateTodo(task._id, updatedTask);
+        setTasks((state) => state.map((x) => (x._id == task._id ? updatedTask : x)));
     };
 
     return (
-        <div className={styles["site-wrapper"]}>
-            <header>
-                <h1>TODO App</h1>
-            </header>
-            <main>
-                <TaskList tasks={tasks} taskDeleteHandler={taskDeleteHandler} />
-                <CreateTask createTaskHandler={createTaskHandler} />
-            </main>
-        </div>
+        <TaskContext.Provider value={{ tasks, taskDeleteHandler, toggleTask, onTaskEditHandler }}>
+            <div className={styles["site-wrapper"]}>
+                <header>
+                    <h1>TODO App</h1>
+                </header>
+                <main>
+                    {isLoading ? <p>Loading....</p> : <TaskList />}
+
+                    <CreateTask createTaskHandler={createTaskHandler} />
+                </main>
+            </div>
+        </TaskContext.Provider>
     );
 }
 
