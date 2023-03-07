@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as gameService from "../src/services/gameService.js";
+import { AuthContext } from "./context/AuthContext.js";
 
 import { Home } from "./components/Home/Home.js";
 import { Navigation } from "./components/Navigation/Navigation.js";
@@ -14,7 +15,11 @@ import { Create } from "./components/Create/Create.js";
 
 function App() {
     const [games, setGames] = useState([]);
+    const [auth, setAuth] = useState({});
 
+    const userLogin = (authData) => {
+        setAuth(authData);
+    };
     const addGameHandler = (gameData) => {
         setGames((state) => [...state, gameData]);
     };
@@ -36,20 +41,22 @@ function App() {
     }, []);
 
     return (
-        <div id="box">
-            <Navigation />
-            {/* Main Content */}
-            <main id="main-content" />
-            <Routes>
-                <Route path="/" element={<Home games={games} />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/catalog" element={<Catalog games={games} />} />
-                <Route path="/catalog/:gameId" element={<Details addComment={addComment} />} />
-                <Route path="/create" element={<Create addGameHandler={addGameHandler} />} />
-                <Route path="/catalog/edit/:id" element={<Edit />} />
-            </Routes>
-        </div>
+        <AuthContext.Provider value={{ auth, userLogin }}>
+            <div id="box">
+                <Navigation />
+                {/* Main Content */}
+                <main id="main-content" />
+                <Routes>
+                    <Route path="/" element={<Home games={games} />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/catalog" element={<Catalog games={games} />} />
+                    <Route path="/catalog/:gameId" element={<Details addComment={addComment} />} />
+                    <Route path="/create" element={<Create addGameHandler={addGameHandler} />} />
+                    <Route path="/catalog/edit/:id" element={<Edit />} />
+                </Routes>
+            </div>
+        </AuthContext.Provider>
     );
 }
 
