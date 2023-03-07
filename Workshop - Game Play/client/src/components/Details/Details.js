@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getById } from "../../services/gameService.js";
+import { Link } from "react-router-dom";
 
 export const Details = ({ addComment }) => {
     const { gameId } = useParams();
 
     const [currentGame, setCurrentGame] = useState({});
-    const [newComment, setNewComment] = useState({
+
+    const [comment, setcomment] = useState({
+        username: "",
+        comment: "",
+    });
+
+    const [error, setError] = useState({
         username: "",
         comment: "",
     });
@@ -19,13 +26,29 @@ export const Details = ({ addComment }) => {
 
     const addCommentHandler = (e) => {
         e.preventDefault();
-        addComment(gameId, `${newComment.username}: ${newComment.comment}`);
+        const result = `${comment.username}: ${comment.comment}`;
+        addComment(gameId, result);
     };
 
     const onChange = (e) => {
-        setNewComment((state) => ({ ...state, [e.target.name]: e.target.value }));
+        setcomment((state) => ({ ...state, [e.target.name]: e.target.value }));
     };
 
+    const validateUsername = (e) => {
+        const username = e.target.value;
+        let errorMessage = "";
+
+        if (username.length < 4) {
+            errorMessage = "Username must be longer than 4 characters";
+        } else if (username.length > 10) {
+            errorMessage = "Username must be shorter than 10 characters";
+        }
+
+        setError((state) => ({
+            ...state,
+            username: errorMessage,
+        }));
+    };
     return (
         <section id="game-details">
             <h1>Game Details</h1>
@@ -41,45 +64,49 @@ export const Details = ({ addComment }) => {
                 <div className="details-comments">
                     <h2>Comments:</h2>
                     <ul>
-                        {/* list all comments for current game (If any) */}
-                        <li className="comment">
-                            <p>Content: I rate this one quite highly.</p>
-                        </li>
-                        <li className="comment">
-                            <p>Content: The best game.</p>
-                        </li>
+                        {/* {game.comments?.map(x => 
+                            <li className="comment">
+                                <p>{x}</p>
+                            </li>
+                        )} */}
                     </ul>
-                    {/* Display paragraph: If there are no games in the database */}
-                    <p className="no-comment">No comments.</p>
+
+                    {/* {!game.comments &&
+                        <p className="no-comment">No comments.</p>
+                    } */}
                 </div>
-                {/* Edit/Delete buttons ( Only for creator of this game )  */}
+
                 <div className="buttons">
-                    <a href="#" className="button">
+                    <Link to={`/games/${gameId}/edit`} className="button">
                         Edit
-                    </a>
-                    <a href="#" className="button">
+                    </Link>
+                    <Link to="#" className="button">
                         Delete
-                    </a>
+                    </Link>
                 </div>
             </div>
-            {/* Bonus */}
-            {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
+
             <article className="create-comment">
                 <label>Add new comment:</label>
                 <form className="form" onSubmit={addCommentHandler}>
                     <input
                         type="text"
                         name="username"
-                        placeholder="Username..."
+                        placeholder="John Doe"
                         onChange={onChange}
-                        value={newComment.username}
+                        onBlur={validateUsername}
+                        value={comment.username}
                     />
+
+                    {error.username && <div style={{ color: "red" }}>{error.username}</div>}
+
                     <textarea
                         name="comment"
                         placeholder="Comment......"
                         onChange={onChange}
-                        value={newComment.comment}
+                        value={comment.comment}
                     />
+
                     <input className="btn submit" type="submit" value="Add Comment" />
                 </form>
             </article>

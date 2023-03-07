@@ -1,9 +1,10 @@
 const request = async (method, url, data) => {
     try {
+        let headers = {};
         let buildRequest;
 
         if (method === "GET") {
-            buildRequest = fetch(url);
+            buildRequest = fetch(url, { headers });
         } else {
             buildRequest = fetch(url, {
                 method,
@@ -16,7 +17,7 @@ const request = async (method, url, data) => {
 
         const response = await buildRequest;
 
-        const result = response.json();
+        const result = await response.json();
         return result;
     } catch (error) {
         console.log(error);
@@ -26,4 +27,5 @@ const request = async (method, url, data) => {
 export const get = request.bind(null, "GET");
 export const post = request.bind(null, "POST");
 export const put = request.bind(null, "PUT");
+export const patch = request.bind(null, "PATCH");
 export const del = request.bind(null, "DELETE");

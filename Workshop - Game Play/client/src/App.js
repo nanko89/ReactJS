@@ -7,6 +7,7 @@ import { AuthContext } from "./context/AuthContext.js";
 import { Home } from "./components/Home/Home.js";
 import { Navigation } from "./components/Navigation/Navigation.js";
 import { Login } from "./components/Login/Login.js";
+import { Logout } from "./components/Logout/Logout.js";
 import { Register } from "./components/Register/Register.js";
 import { Catalog } from "./components/Catalog/Catalog.js";
 import { Details } from "./components/Details/Details.js";
@@ -20,6 +21,11 @@ function App() {
     const userLogin = (authData) => {
         setAuth(authData);
     };
+
+    const userLogout = () => {
+        setAuth({});
+    };
+
     const addGameHandler = (gameData) => {
         setGames((state) => [...state, gameData]);
     };
@@ -30,7 +36,7 @@ function App() {
             const comments = game.comments || [];
             comments.push(comment);
 
-            return [...state.filter((g) => g._id !== gameId), { ...game, comments: comments }];
+            return [...state.filter((g) => g._id !== gameId), { ...game, comments }];
         });
     };
 
@@ -41,7 +47,7 @@ function App() {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ auth, userLogin }}>
+        <AuthContext.Provider value={{ user: auth, userLogin, userLogout }}>
             <div id="box">
                 <Navigation />
                 {/* Main Content */}
@@ -50,6 +56,7 @@ function App() {
                     <Route path="/" element={<Home games={games} />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/logout" element={<Logout />} />
                     <Route path="/catalog" element={<Catalog games={games} />} />
                     <Route path="/catalog/:gameId" element={<Details addComment={addComment} />} />
                     <Route path="/create" element={<Create addGameHandler={addGameHandler} />} />
