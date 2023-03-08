@@ -1,7 +1,14 @@
 const request = async (method, url, data) => {
     try {
+        const user = localStorage.getItem("auth");
+        const auth = JSON.parse(user || "{}");
+
         let headers = {};
         let buildRequest;
+
+        if (auth.accessToken) {
+            headers["X-Authorization"] = auth.accessToken;
+        }
 
         if (method === "GET") {
             buildRequest = fetch(url, { headers });
@@ -9,6 +16,7 @@ const request = async (method, url, data) => {
             buildRequest = fetch(url, {
                 method,
                 headers: {
+                    ...headers,
                     "content-type": "application/json",
                 },
                 body: JSON.stringify(data),
@@ -18,6 +26,7 @@ const request = async (method, url, data) => {
         const response = await buildRequest;
 
         const result = await response.json();
+
         return result;
     } catch (error) {
         console.log(error);

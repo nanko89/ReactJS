@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as gameService from "../src/services/gameService.js";
 import { AuthContext } from "./context/AuthContext.js";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 import { Home } from "./components/Home/Home.js";
 import { Navigation } from "./components/Navigation/Navigation.js";
@@ -16,7 +17,7 @@ import { Create } from "./components/Create/Create.js";
 
 function App() {
     const [games, setGames] = useState([]);
-    const [auth, setAuth] = useState({});
+    const [auth, setAuth] = useLocalStorage("auth", {});
 
     const userLogin = (authData) => {
         setAuth(authData);

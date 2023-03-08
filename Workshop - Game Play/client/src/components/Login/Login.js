@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/AuthContext.js";
-import * as authService from "../../services/userService";
+import * as userService from "../../services/userService";
 
 export const Login = () => {
     const { userLogin } = useContext(AuthContext);
@@ -12,7 +12,7 @@ export const Login = () => {
 
         const { email, password } = Object.fromEntries(new FormData(e.target));
 
-        authService
+        userService
             .login(email, password)
             .then((authData) => {
                 userLogin(authData);
