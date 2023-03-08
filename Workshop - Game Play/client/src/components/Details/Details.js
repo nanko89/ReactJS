@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getById } from "../../services/gameService.js";
 import { Link } from "react-router-dom";
 
+import { AuthContext } from "../../context/AuthContext.js";
+
 export const Details = ({ addComment }) => {
+    const { user } = useContext(AuthContext);
+
     const { gameId } = useParams();
 
     const [currentGame, setCurrentGame] = useState({});
@@ -76,14 +80,16 @@ export const Details = ({ addComment }) => {
                     } */}
                 </div>
 
-                <div className="buttons">
-                    <Link to={`/games/${gameId}/edit`} className="button">
-                        Edit
-                    </Link>
-                    <Link to="#" className="button">
-                        Delete
-                    </Link>
-                </div>
+                {currentGame._ownerId === user._id ? (
+                    <div className="buttons">
+                        <Link to={`/catalog/${gameId}/edit`} className="button">
+                            Edit
+                        </Link>
+                        <Link to="#" className="button">
+                            Delete
+                        </Link>
+                    </div>
+                ) : null}
             </div>
 
             <article className="create-comment">

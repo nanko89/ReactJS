@@ -1,6 +1,10 @@
 import { LatesGame } from "./Game/LatesGame.js";
+import { GameContext } from "../../context/GameContext.js";
+import { useContext } from "react";
 
-export const Home = ({ games }) => {
+export const Home = () => {
+    const { lastGames } = useContext(GameContext);
+
     return (
         <section id="welcome-world">
             <div className="welcome-message">
@@ -10,8 +14,8 @@ export const Home = ({ games }) => {
             <img src="./images/four_slider_img01.png" alt="hero" />
             <div id="home-page">
                 <h1>Latest Games</h1>
-                {games.length > 0 ? (
-                    games.map((g) => <LatesGame key={g._id} {...g} />)
+                {lastGames.length > 0 ? (
+                    lastGames.map((g) => <LatesGame key={g._id} {...g} />)
                 ) : (
                     <p className="no-articles">No games yet</p>
                 )}

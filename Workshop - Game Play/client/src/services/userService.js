@@ -6,11 +6,13 @@ export const login = (email, password) => request.post(`${baseUrl}/login`, { ema
 
 export const logout = async (accessToken) => {
     try {
-        return await request.get(`${baseUrl}/logout`, {
+        const response = await request.get(`${baseUrl}/logout`, {
             headers: {
                 "X-Authorisation": accessToken,
             },
         });
+
+        return response;
     } catch (error) {
         console.log(error);
     }

@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import * as gameService from "../../services/gameService";
+import { GameContext } from "../../context/GameContext.js";
 
-export const Create = ({ addGameHandler }) => {
+export const Create = () => {
+    const { gameAdd } = useContext(GameContext);
+
     const onCreate = (e) => {
         e.preventDefault();
 
         const data = Object.fromEntries(new FormData(e.target));
 
-        addGameHandler(data);
+        gameService.create(data).then((resutlt) => gameAdd(resutlt));
     };
 
     const [newGame, setNewGame] = useState({
