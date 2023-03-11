@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/AuthContext.js";
 
-export const Details = ({ addComment }) => {
-    const { user } = useContext(AuthContext);
+export const Details = () => {
+    const { user, addComment } = useContext(AuthContext);
 
     const { gameId } = useParams();
 
