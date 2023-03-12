@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext.js";
 import { GameContext, GameProvider } from "./context/GameContext.js";
+import { PriviteRoute } from "./common/PrivateRound.js";
+import { RouteGuard } from "./common/RouteGuard.js";
 
 import { Home } from "./components/Home/Home.js";
 import { Navigation } from "./components/Navigation/Navigation.js";
@@ -20,21 +22,26 @@ function App() {
         <AuthProvider>
             <div id="box">
                 <Navigation />
-                {/* Main Content */}
                 <main id="main-content" />
                 <GameProvider>
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/logout" element={<Logout />} />
                         <Route path="/catalog" element={<Catalog />} />
                         <Route
                             path="/catalog/:gameId"
                             element={<Details />}
                         />
-                        <Route path="/create" element={<Create />} />
-                        <Route path="/catalog/:gameId/edit" element={<Edit />} />
+                        <Route path="/create" element={
+                            <PriviteRoute>
+                                <Create />
+                            </PriviteRoute>} 
+                        />
+                        <Route element={RouteGuard}>
+                            <Route path="/catalog/:gameId/edit" element={<Edit />} />
+                            <Route path="/logout" element={<Logout />} />
+                        </Route>
                     </Routes>
                 </GameProvider>
             </div>

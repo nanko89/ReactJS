@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage.js";
 
 
@@ -14,9 +14,22 @@ export const AuthProvider = ({ children }) => {
     const userLogout = () => {
         setAuth({});
     };
+
     return (
-        <AuthContext.Provider value={{ user: auth, userLogin, userLogout }}>
+        <AuthContext.Provider value={{ 
+            user: auth, 
+            userLogin, 
+            userLogout,
+            isAuthenticated: !!auth.accessToken // ===  auth.accessToken ? true : false;
+        }}>
             {children}
         </AuthContext.Provider>
         );
+};
+
+// Custom hook
+export const useAuthContext = () => {
+    const context = useContext(AuthContext);
+
+    return context;
 };

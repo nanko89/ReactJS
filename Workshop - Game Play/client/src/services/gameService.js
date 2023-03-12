@@ -21,3 +21,7 @@ export const create = (data) => {
 export const edit = (id, data) => {
     return request.put(`${baseUrl}/${id}`, data);
 };
+
+export const remove = (id) => {
+    return request.del(`${baseUrl}/${id}`);
+}
