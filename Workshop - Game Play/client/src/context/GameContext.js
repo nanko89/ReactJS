@@ -32,7 +32,6 @@ export const GameProvider = ({children}) => {
     useEffect(() => {
         gameService.getAll()
             .then((result) => {
-
                 const action = {
                     type: 'ADD_GAMES',
                     payload: result

@@ -3,9 +3,9 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext.js";
-import { GameContext, GameProvider } from "./context/GameContext.js";
-import { PriviteRoute } from "./common/PrivateRound.js";
-import { RouteGuard } from "./common/RouteGuard.js";
+import { GameProvider } from "./context/GameContext.js";
+import { PriviteRoute } from "./common/PriviteRoute.js";
+import { GameOwner } from "./common/GameOwner.js";
 
 import { Home } from "./components/Home/Home.js";
 import { Navigation } from "./components/Navigation/Navigation.js";
@@ -38,8 +38,10 @@ function App() {
                                 <Create />
                             </PriviteRoute>} 
                         />
-                        <Route element={RouteGuard}>
+                        <Route element={<GameOwner/>}>
                             <Route path="/catalog/:gameId/edit" element={<Edit />} />
+                        </Route>
+                        <Route element={<PriviteRoute/>}>
                             <Route path="/logout" element={<Logout />} />
                         </Route>
                     </Routes>
