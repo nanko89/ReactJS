@@ -9,7 +9,7 @@ const JokeArticke = ({ iconUrl, text }) => {
                 <img src={iconUrl} alt="Chuck Norris Joke" />
             </header>
             <main>
-                <p>{text}</p>
+                <p className="joke-text">{text}</p>
             </main>
         </article>
     );
