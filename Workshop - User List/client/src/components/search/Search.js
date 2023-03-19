@@ -1,6 +1,27 @@
+import { useContext, useState } from "react";
+import { UserContext } from "../../context/UserContext.js";
+
 export const Search = () => {
+    const [search, setSearch] = useState("");
+    const [criteria, setCriteria] = useState("all");
+
+    const { filterUsers } = useContext(UserContext);
+
+    const onSearchChange = (e) => {
+        setSearch(e.target.value);
+    };
+
+    const onSearchSubmit = (e) => {
+        e.preventDefault();
+        filterUsers(search, criteria);
+    };
+
+    const onSearchCriteriaChange = (e) => {
+        setCriteria(e.target.value);
+    };
+
     return (
-        <form className="search-form">
+        <form className="search-form" onSubmit={onSearchSubmit}>
             <h2>
                 <svg
                     aria-hidden="true"
@@ -20,10 +41,18 @@ export const Search = () => {
                 <span>Users</span>
             </h2>
             <div className="search-input-container">
-                <input type="text" placeholder="Please, select the search criteria" name="search" />
-                <button className="btn close-btn">
-                    <i className="fa-solid fa-xmark"></i>
-                </button>
+                <input
+                    type="text"
+                    placeholder="Please, select the search criteria"
+                    name="search"
+                    onChange={onSearchChange}
+                    value={search}
+                />
+                {search.length > 0 && (
+                    <button className="btn close-btn" onClick={() => setSearch("")}>
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                )}
 
                 <button className="btn" title="Please, select the search criteria">
                     <i className="fa-solid fa-magnifying-glass"></i>
@@ -32,12 +61,12 @@ export const Search = () => {
 
             <div className="filter">
                 <span>Search Criteria:</span>
-                <select name="criteria" className="criteria">
-                    <option>Not selected</option>
-                    <option>First Name</option>
-                    <option>Last Name</option>
-                    <option>Email</option>
-                    <option>Phone</option>
+                <select name="criteria" className="criteria" onChange={onSearchCriteriaChange}>
+                    <option value="all">Not selected</option>
+                    <option value="firstName">First Name</option>
+                    <option value="lastName">Last Name</option>
+                    <option value="email">Email</option>
+                    <option value="phoneNumber">Phone</option>
                 </select>
             </div>
         </form>

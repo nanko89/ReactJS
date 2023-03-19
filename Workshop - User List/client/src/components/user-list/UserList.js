@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 
 import { ActionTypes } from "./UserListConst.js";
 import { create, edit, getById, getAll, deleted } from "../../services/userService.js";
@@ -8,14 +8,12 @@ import { UserEdit } from "../user-actions/UserEdit.js";
 import { UserDetails } from "../user-actions/UserDetails.js";
 import { UserDelete } from "../user-actions/UserDelete.js";
 import { UserRow } from "./user-row/UserRow.js";
+import { UserContext } from "../../context/UserContext.js";
 
 export const UserList = () => {
     const [userAction, setUserAction] = useState({ user: null, action: null });
 
-    const [users, setUsers] = useState([]);
-    useEffect(() => {
-        getAll().then((users) => setUsers(users));
-    }, []);
+    const { users, addUser } = useContext(UserContext);
 
     const userActionClickHandler = (id, actionType) => {
         getById(id).then((user) => {
@@ -34,7 +32,7 @@ export const UserList = () => {
     const userEditHandler = (userData) => {
         edit(userAction.user._id, userData)
             .then(() => {
-                getAll().then((users) => setUsers(users));
+                // getAll().then((users) => setUsers(users));
                 closeHandler();
             })
             .catch((err) => alert(err.message));
@@ -43,7 +41,7 @@ export const UserList = () => {
     const userCreateHandler = (userData) => {
         create(userData)
             .then((user) => {
-                setUsers((oldUser) => [...oldUser, user]);
+                addUser(user);
                 closeHandler();
             })
             .catch((err) => alert(err.message));
@@ -51,7 +49,7 @@ export const UserList = () => {
 
     const userDeleteHandler = () => {
         deleted(userAction.user._id).then(() => {
-            getAll().then((users) => setUsers(users));
+            // getAll().then((users) => setUsers(users));
             closeHandler();
         });
     };
